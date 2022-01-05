@@ -24,6 +24,6 @@
 hs_err_pid*
 
 # additional paths
-/.gradle
-/.idea
+.gradle
+.idea
 /build
