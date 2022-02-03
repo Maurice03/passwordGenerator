@@ -1,3 +1,5 @@
+import src.main.kotlin.imports.Random
+
 fun main() {
     script()
 }
@@ -33,13 +35,13 @@ fun script() {
     passwordCharsIncluded = readln()
     if (passwordCharsIncluded == "default") {
         while (passwordLength.toByte() < 32) {
-            println("The 'default' option requires a length of at least 32.")
+            println("The 'default' option requires a length of at least 32 chars.")
             println("Would you like to change the length?")
             var answer = readln()
             if (answer.equals("yes") || answer.equals("y")) {
                 println("Enter new length:")
                 passwordLength = readln()
-            } else if (answer == "no") {
+            } else if (answer == "no" || answer == "n") {
                 println("include special characters:")
                 passwordCharsIncluded = readln()
                 break
@@ -84,6 +86,8 @@ fun generatePassword(
     var additionalSpecialChars = passwordCharsIncluded.toCharArray()
     var defaultSpecialChars = "^!$%&/()=?+*#_<>".toCharArray()
 
+    val rand = Random()
+
     // The following if-statements create three lists with the choosen characters.
     if (passwordAlphabeticCharacters.equals("yes") || passwordAlphabeticCharacters.equals("y")) {
         alphabetSelected = true
@@ -123,19 +127,19 @@ fun generatePassword(
     var counter1: Byte = 0
     while (counter1 < passwordLength.toByte()) {
         if (alphabetSelected && numberSelected) {
-            var randomRange = generateRandomNumber(0, 1)
+            var randomRange = rand.getNumber( 1)
             if (randomRange == 0) {
-                var randomIndex = generateRandomNumber(0, alphabetRange.size - 1)
+                var randomIndex = rand.getNumber( alphabetRange.size - 1)
                 password += alphabetRange[randomIndex]
             } else if (randomRange == 1) {
-                var randomIndex = generateRandomNumber(0, numberRange.size - 1)
+                var randomIndex = rand.getNumber( numberRange.size - 1)
                 password += numberRange[randomIndex]
             }
         } else if (alphabetSelected) {
-            var randomIndex = generateRandomNumber(0, alphabetRange.size - 1)
+            var randomIndex = rand.getNumber( alphabetRange.size - 1)
             password += alphabetRange[randomIndex]
         } else if (numberSelected) {
-            var randomIndex = generateRandomNumber(0, numberRange.size - 1)
+            var randomIndex = rand.getNumber( numberRange.size - 1)
             password += numberRange[randomIndex]
         }
         counter1++
@@ -145,15 +149,15 @@ fun generatePassword(
         var tempPassword = password.toCharArray()
         for (i in tempPassword.indices) {
             if (passwordLength.toShort() < 10) {
-                var randomNum = generateRandomNumber(0, 2)
+                var randomNum = rand.getNumber( 2)
                 if (randomNum > 1) {
-                    var randomIndex = generateRandomNumber(0, specialCharRange.size - 1)
+                    var randomIndex = rand.getNumber( specialCharRange.size - 1)
                     tempPassword[i] = specialCharRange[randomIndex]
                 }
             } else if (passwordLength.toShort() > 10) {
-                var randomNum = generateRandomNumber(0, 3)
+                var randomNum = rand.getNumber( 3)
                 if (randomNum > 1) {
-                    var randomIndex = generateRandomNumber(0, specialCharRange.size - 1)
+                    var randomIndex = rand.getNumber( specialCharRange.size - 1)
                     tempPassword[i] = specialCharRange[randomIndex]
                 }
             }
@@ -189,8 +193,4 @@ fun generatePassword(
     } else {
         return "error";
     }
-}
-
-fun generateRandomNumber(startValue: Int, endValue: Int): Int {
-    return (startValue..endValue).random()
 }
