@@ -119,12 +119,12 @@ fun generatePassword(
         }
         Regex("default").matches(passwordCharsIncluded) ->
             for (char in defaultSpecialChars) {
-            specialCharRange.add(char)
-        }
+                specialCharRange.add(char)
+            }
         Regex(".").matches(passwordCharsIncluded) ->
             for (char in additionalSpecialChars) {
-            specialCharRange.add(char)
-        }
+                specialCharRange.add(char)
+            }
     }
 
     specialCharRange.shuffle()
@@ -135,17 +135,17 @@ fun generatePassword(
         if (alphabetSelected && numberSelected) {
             var randomRange = rand.getNumber(1)
             if (randomRange == 0) {
-                var randomIndex = rand.getNumber(alphabetRange.size -1)
+                var randomIndex = rand.getNumber(alphabetRange.size - 1)
                 password += alphabetRange[randomIndex]
             } else if (randomRange == 1) {
-                var randomIndex = rand.getNumber(numberRange.size -1)
+                var randomIndex = rand.getNumber(numberRange.size - 1)
                 password += numberRange[randomIndex]
             }
         } else if (alphabetSelected) {
-            var randomIndex = rand.getNumber(alphabetRange.size -1)
+            var randomIndex = rand.getNumber(alphabetRange.size - 1)
             password += alphabetRange[randomIndex]
         } else if (numberSelected) {
-            var randomIndex = rand.getNumber(numberRange.size -1)
+            var randomIndex = rand.getNumber(numberRange.size - 1)
             password += numberRange[randomIndex]
         }
         counter1++
