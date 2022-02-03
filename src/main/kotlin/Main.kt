@@ -83,18 +83,20 @@ fun generatePassword(
     var specialCharRange = mutableListOf<Char>()
     var uppercaseSelected: Boolean = false
 
+    var specialCharIndicator = true;
+
     var additionalSpecialChars = passwordCharsIncluded.toCharArray()
     var defaultSpecialChars = "^!$%&/()=?+*#_<>".toCharArray()
 
     val rand = Random()
 
     // The following if-statements create three lists with the choosen characters.
-    if (passwordAlphabeticCharacters.equals("yes") || passwordAlphabeticCharacters.equals("y")) {
+    if (passwordAlphabeticCharacters.matches(Regex("y(es)?"))) {
         alphabetSelected = true
         for (lowercaseChar in 'a'..'z') {
             alphabetRange.add(lowercaseChar)
         }
-        if (passwordUppercase.equals("yes") || passwordUppercase.equals("y")) {
+        if (passwordUppercase.matches(Regex("y(es)?"))) {
             uppercaseSelected = true
             for (uppercaseChar in 'A'..'Z') {
                 alphabetRange.add(uppercaseChar)
@@ -103,7 +105,7 @@ fun generatePassword(
         alphabetRange.shuffle()
     }
 
-    if (passwordNumbers.equals("yes") || passwordNumbers.equals("y")) {
+    if (passwordNumbers.matches(Regex("y(es)?"))) {
         numberSelected = true
         for (num in '0'..'9') {
             numberRange.add(num)
@@ -111,12 +113,16 @@ fun generatePassword(
         numberRange.shuffle()
     }
 
-    if (passwordCharsIncluded.equals("default")) {
-        for (char in defaultSpecialChars) {
+    when {
+        Regex("n(one)?").matches(passwordCharsIncluded) -> {
+            specialCharIndicator = false
+        }
+        Regex("default").matches(passwordCharsIncluded) ->
+            for (char in defaultSpecialChars) {
             specialCharRange.add(char)
         }
-    } else {
-        for (char in additionalSpecialChars) {
+        Regex(".").matches(passwordCharsIncluded) ->
+            for (char in additionalSpecialChars) {
             specialCharRange.add(char)
         }
     }
@@ -127,19 +133,19 @@ fun generatePassword(
     var counter1: Byte = 0
     while (counter1 < passwordLength.toByte()) {
         if (alphabetSelected && numberSelected) {
-            var randomRange = rand.getNumber( 1)
+            var randomRange = rand.getNumber(1)
             if (randomRange == 0) {
-                var randomIndex = rand.getNumber( alphabetRange.size - 1)
+                var randomIndex = rand.getNumber(alphabetRange.size -1)
                 password += alphabetRange[randomIndex]
             } else if (randomRange == 1) {
-                var randomIndex = rand.getNumber( numberRange.size - 1)
+                var randomIndex = rand.getNumber(numberRange.size -1)
                 password += numberRange[randomIndex]
             }
         } else if (alphabetSelected) {
-            var randomIndex = rand.getNumber( alphabetRange.size - 1)
+            var randomIndex = rand.getNumber(alphabetRange.size -1)
             password += alphabetRange[randomIndex]
         } else if (numberSelected) {
-            var randomIndex = rand.getNumber( numberRange.size - 1)
+            var randomIndex = rand.getNumber(numberRange.size -1)
             password += numberRange[randomIndex]
         }
         counter1++
@@ -148,16 +154,16 @@ fun generatePassword(
     if (!passwordCharsIncluded.isBlank()) {
         var tempPassword = password.toCharArray()
         for (i in tempPassword.indices) {
-            if (passwordLength.toShort() < 10) {
-                var randomNum = rand.getNumber( 2)
+            if (passwordLength.toShort() < 10 && specialCharIndicator == true) {
+                var randomNum = rand.getNumber(2)
                 if (randomNum > 1) {
-                    var randomIndex = rand.getNumber( specialCharRange.size - 1)
+                    var randomIndex = rand.getNumber(specialCharRange.size)
                     tempPassword[i] = specialCharRange[randomIndex]
                 }
-            } else if (passwordLength.toShort() > 10) {
-                var randomNum = rand.getNumber( 3)
+            } else if (passwordLength.toShort() > 10 && specialCharIndicator == true) {
+                var randomNum = rand.getNumber(3)
                 if (randomNum > 1) {
-                    var randomIndex = rand.getNumber( specialCharRange.size - 1)
+                    var randomIndex = rand.getNumber(specialCharRange.size)
                     tempPassword[i] = specialCharRange[randomIndex]
                 }
             }
