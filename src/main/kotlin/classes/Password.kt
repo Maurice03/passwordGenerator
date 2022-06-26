@@ -1,4 +1,4 @@
-package imports
+package classes
 
 class Password : Random() {
     private var password: String = ""
@@ -66,12 +66,20 @@ class Password : Random() {
             when {
                 alphabetRange != null && numberRange != null -> {
                     val tempRandom = Random.getNumber(1)
-                    if (tempRandom == 0) {
-                        val randomIndex = Random.getNumber(alphabetRange.size - 1)
-                        password += alphabetRange[randomIndex]
+                    password += if (tempRandom == 0) {
+                        val randomIndex: Int = if (alphabetRange.size == 0) {
+                            return
+                        } else {
+                            Random.getNumber(alphabetRange.size - 1)
+                        }
+                        alphabetRange[randomIndex]
                     } else {
-                        val randomIndex = Random.getNumber(numberRange.size - 1)
-                        password += numberRange[randomIndex]
+                        val randomIndex: Int = if (numberRange.size == 0) {
+                            return
+                        } else {
+                            Random.getNumber(numberRange.size - 1)
+                        }
+                        numberRange[randomIndex]
                     }
                 }
                 alphabetRange != null -> {
@@ -85,7 +93,7 @@ class Password : Random() {
             }
         }
 
-        // special chars are added initial password
+        // special chars are added to initial password
         if (specialCharRange.isNotEmpty()) {
             val tempPassword = password.toCharArray()
             for (i in tempPassword.indices) {
@@ -126,7 +134,7 @@ class Password : Random() {
             }
         }
 
-        // test if created password contains these chars
+        // test if created password contains all required chars
         return if (testPassed) {
             display()
         } else {

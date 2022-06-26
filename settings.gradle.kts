@@ -1,3 +1,3 @@
 
-rootProject.name = "diesdas"
+rootProject.name = "passwordGenerator"
 

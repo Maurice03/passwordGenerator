@@ -1,4 +1,4 @@
-import imports.Password
+import classes.Password
 
 fun main() {
     script()
